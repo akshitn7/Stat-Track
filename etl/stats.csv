@@ -1,4 +1,4 @@
-player_id_y,game_id,agent_id,rating,acs,kill,death,assist,kast%,adr,hs%,fk,fd
+player_id,game_id,agent_id,rating,acs,kills,deaths,assists,kast_percent,adr,hs_percent,first_kills,first_deaths
 1001,10001,6,1.19,239,15,11,6,72,146,16,1,0
 1002,10001,4,0.84,234,15,14,6,61,145,32,1,4
 1003,10001,10,0.68,173,10,15,2,67,123,18,4,2
