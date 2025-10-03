@@ -44,12 +44,7 @@ def ingest_data():
     except FileNotFoundError as e:
         print(f"Error: The file '{e.filename}' was not found. Ensure it's in the same folder as the script.")
     except Error as e:
-        if e.errno == 1452: # Foreign key constraint fails
-            print(f"Foreign Key Error: A row in your CSV file refers to an ID that does not exist in a parent table. Error: {e}")
-        elif e.errno == 2003: print("Error: Could not connect to the MySQL server.")
-        elif e.errno == 1045: print("Error: Access denied. Please check your username and password.")
-        elif e.errno == 1049: print(f"Error: Database '{db_config['database']}' does not exist.")
-        else: print(f"A database error occurred: {e}")
+        print(f"A database error occurred: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
