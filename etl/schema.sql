@@ -1,4 +1,4 @@
-CREATE DATABASE if not exists STATTRACK;
+CREATE DATABASE IF NOT EXISTS STATTRACK;
 USE STATTRACK;
 
 -- Table for teams
@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS games (
     l_score INT,
     CONSTRAINT fk_games_team1 FOREIGN KEY (team1_id) REFERENCES teams(team_id),
     CONSTRAINT fk_games_team2 FOREIGN KEY (team2_id) REFERENCES teams(team_id),
-    CONSTRAINT fk_games_winner FOREIGN KEY (winner_id) REFERENCES teams(team_id)
+    CONSTRAINT fk_games_winner FOREIGN KEY (winner_id) REFERENCES teams(team_id),
+    CONSTRAINT chk_winner_valid CHECK (winner_id = team1_id OR winner_id = team2_id)
 );
 
 -- Table for player stats, with foreign keys to players, games, and agents
