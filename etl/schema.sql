@@ -57,3 +57,15 @@ CREATE TABLE IF NOT EXISTS stats (
     CONSTRAINT fk_stats_games FOREIGN KEY (game_id) REFERENCES games(game_id),
     CONSTRAINT fk_stats_agents FOREIGN KEY (agent_id) REFERENCES agents(agent_id)
 );
+DELIMITER //
+CREATE TRIGGER limit_stats_per_game
+BEFORE INSERT ON stats
+FOR EACH ROW
+BEGIN
+    IF (SELECT COUNT(*) FROM stats WHERE game_id = NEW.game_id) >= 10 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Each game can have only 10 player stats entries.';
+    END IF;
+END;
+//
+DELIMITER ;
