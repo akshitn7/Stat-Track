@@ -75,7 +75,7 @@ with tabs[0]:
     st.subheader("Teams")
     cursor.execute("SELECT * FROM teams")
     teams_df = pd.DataFrame(cursor.fetchall())
-    st.dataframe(teams_df.reset_index(drop = True), use_container_width=True)
+    st.dataframe(teams_df.reset_index(drop = True), hide_index=True, use_container_width=True)
 
     # UPDATE / DELETE
     with st.form("update_team"):
@@ -117,7 +117,7 @@ with tabs[1]:
         LEFT JOIN teams t ON p.team_id = t.team_id
     """)
     players_df = pd.DataFrame(cursor.fetchall())
-    st.dataframe(players_df.reset_index(drop = True), use_container_width=True)
+    st.dataframe(players_df.reset_index(drop = True), hide_index=True, use_container_width=True)
 
 # ------------------- AGENTS -------------------
 with tabs[2]:
@@ -140,7 +140,7 @@ with tabs[2]:
     st.subheader("All Agents")
     cursor.execute("SELECT * FROM agents")
     agents_df = pd.DataFrame(cursor.fetchall())
-    st.dataframe(agents_df.reset_index(drop = True), use_container_width=True)
+    st.dataframe(agents_df.reset_index(drop = True), hide_index=True, use_container_width=True)
 
 # --------------------------- GAMES ---------------------------
 with tabs[3]:
@@ -167,7 +167,7 @@ with tabs[3]:
     st.subheader("Update Games with Missing Scores/Winner")
     cursor.execute("SELECT * FROM games WHERE winner_id IS NULL OR w_score IS NULL OR l_score IS NULL")
     incomplete_games_df = pd.DataFrame(cursor.fetchall())
-    st.dataframe(incomplete_games_df.reset_index(drop=True), use_container_width=True)
+    st.dataframe(incomplete_games_df.reset_index(drop=True), hide_index=True, use_container_width=True)
     if not incomplete_games_df.empty:
         with st.form("update_game_form"):
             game_to_update = st.selectbox(
@@ -206,7 +206,7 @@ with tabs[3]:
     if incomplete_games_df.empty:
         st.info("No incomplete games to delete.")
     else:
-        st.dataframe(incomplete_games_df.reset_index(drop=True), use_container_width=True)
+        st.dataframe(incomplete_games_df.reset_index(drop=True), hide_index=True, use_container_width=True)
         with st.form("delete_game_form"):
             game_to_delete = st.selectbox(
                 "Select Game ID to Delete",
@@ -288,7 +288,7 @@ with tabs[4]:
         st.success("✅ All games already have 10 stats entries.")
     else:
         st.warning("Some games don't have 10 stat entries.")
-        st.dataframe(incomplete_games, use_container_width=True)
+        st.dataframe(incomplete_games, hide_index=True, use_container_width=True)
 
         # Select a game
         game_to_add = st.selectbox("Select a Game ID to add stats", options=incomplete_games["game_id"].tolist())
@@ -466,7 +466,7 @@ with tabs[4]:
 
             if current_stats:
                 st.markdown("### Current Stats")
-                st.dataframe(pd.DataFrame([current_stats]), use_container_width=True)
+                st.dataframe(pd.DataFrame([current_stats]), hide_index=True, use_container_width=True)
 
                 st.markdown("### Enter New Stats (all fields required)")
 
