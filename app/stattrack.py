@@ -48,7 +48,7 @@ if choice == "🏠 Overview":
             text=df_teams["win_rate"].round(2),
             textposition="auto"
         ))
-        fig.update_layout(title="Top Teams by Win %", xaxis_title="Win Rate (%)", yaxis_title="", height=400)
+        fig.update_layout(title="Top Teams by Win %", xaxis_title="Win Rate (%)", yaxis_title="", height=300, yaxis=dict(autorange="reversed"))
         st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
@@ -64,7 +64,7 @@ if choice == "🏠 Overview":
             text=df_players["avg_rating"].round(2),
             textposition="auto"
         ))
-        fig.update_layout(title="Top Players by Rating", xaxis_title="Average Rating", yaxis_title="", height=400)
+        fig.update_layout(title="Top Players by Rating", xaxis_title="Average Rating", yaxis_title="", height=300, yaxis=dict(autorange="reversed"))
         st.plotly_chart(fig, use_container_width=True)
 
     with tab3:
@@ -80,7 +80,7 @@ if choice == "🏠 Overview":
             text=df_agents["pick_percent"].round(2),
             textposition="auto"
         ))
-        fig.update_layout(title="Top Agents by Pick %", xaxis_title="Pick %", yaxis_title="", height=400)
+        fig.update_layout(title="Top Agents by Pick %", xaxis_title="Pick %", yaxis_title="", height=300, yaxis=dict(autorange="reversed"))
         st.plotly_chart(fig, use_container_width=True)
 
 # ⚔️ MATCHES TAB
@@ -163,8 +163,9 @@ elif choice == "👥 Teams":
         st.subheader(f"Player Summary for {team_selected}")
         display_df(df_team_players)
 
-        metric = st.selectbox("Select Metric for Comparison", ["rating", "kills", "assists", "deaths"])
+        metric = st.selectbox("Select Metric for Comparison", ["avg_acs", "avg_rating", "avg_kills", "avg_assists", "avg_deaths"])
         if metric in df_team_players.columns:
+            df_team_players = df_team_players.sort_values(by=metric, ascending=True)
             fig = go.Figure(go.Bar(
                 x=df_team_players[metric],
                 y=df_team_players["player_name"],

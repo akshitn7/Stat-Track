@@ -109,7 +109,7 @@ LEFT JOIN games g ON t.team_id IN (g.team1_id, g.team2_id)
 GROUP BY t.team_id, t.team_name;
 
 -- Team Player Summary
-CREATE VIEW view_team_player_summary AS
+CREATE OR REPLACE VIEW view_team_player_summary AS
 SELECT 
     t.team_name,
     p.player_name,
@@ -117,6 +117,7 @@ SELECT
     COALESCE(ROUND(AVG(s.acs), 1), 'N/A') AS avg_acs,
     COALESCE(ROUND(AVG(s.kills), 1), 'N/A') AS avg_kills,
     COALESCE(ROUND(AVG(s.deaths), 1), 'N/A') AS avg_deaths,
+    COALESCE(ROUND(AVG(s.assists), 1), 'N/A') AS avg_assists,
     COUNT(s.game_id) AS games_played
 FROM players p
 JOIN teams t ON p.team_id = t.team_id
