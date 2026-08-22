@@ -1,16 +1,20 @@
 import streamlit as st
 import pandas as pd
 import mysql.connector
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 st.title("📈Stat Track🛣️")
 
 
 #Connect to database
 conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="root",
-    database="stattrack"
+    host=os.environ["DB_HOST"],
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASSWORD"],
+    database=os.environ["DB_NAME"]
 )
 cursor = conn.cursor(dictionary=True)
 

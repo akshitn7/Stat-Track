@@ -2,16 +2,20 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import mysql.connector
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # APP TITLE
-st.title("📈 Stat Track 🛣️")
+st.title(" Stat Track ")
 
 # DATABASE CONNECTION
 conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="root",
-    database="stattrack"
+    host=os.environ["DB_HOST"],
+    user=os.environ["DB_USER"],
+    password=os.environ["DB_PASSWORD"],
+    database=os.environ["DB_NAME"]
 )
 cursor = conn.cursor(dictionary=True)
 
@@ -38,18 +42,21 @@ if choice == "🏠 Overview":
     with tab1:
         st.subheader("🏆 Top Teams (by Win %)")
         df_teams = load_data("SELECT * FROM view_team_performance ORDER BY win_rate DESC LIMIT 5;")
-        display_df(df_teams.drop("team_id", axis=1))
+        if df_teams.empty:
+            st.warning("No team data available. Load the CSV data into MySQL first.")
+        else:
+            display_df(df_teams.drop("team_id", axis=1, errors="ignore"))
 
-        fig = go.Figure(go.Bar(
-            x=df_teams["win_rate"],
-            y=df_teams["team_name"],
-            orientation="h",
-            marker=dict(color="#4bc0c0"),
-            text=df_teams["win_rate"].round(2),
-            textposition="auto"
-        ))
-        fig.update_layout(title="Top Teams by Win %", xaxis_title="Win Rate (%)", yaxis_title="", height=300, yaxis=dict(autorange="reversed"))
-        st.plotly_chart(fig, use_container_width=True)
+            fig = go.Figure(go.Bar(
+                x=df_teams["win_rate"],
+                y=df_teams["team_name"],
+                orientation="h",
+                marker=dict(color="#4bc0c0"),
+                text=df_teams["win_rate"].round(2),
+                textposition="auto"
+            ))
+            fig.update_layout(title="Top Teams by Win %", xaxis_title="Win Rate (%)", yaxis_title="", height=300, yaxis=dict(autorange="reversed"))
+            st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
         st.subheader("👥 Top Players (by Rating)")
@@ -154,7 +161,7 @@ elif choice == "👥 Teams":
 
     df_team_perf = load_data("SELECT * FROM view_team_performance;")
     st.subheader("🏆 Team Performance Overview")
-    display_df(df_team_perf.drop("team_id", axis=1))
+    display_df(df_team_perf.drop("team_id", axis=1, errors="ignore"))
 
     if not df_team_perf.empty:
         team_selected = st.selectbox("Select a Team", sorted(df_team_perf["team_name"].unique()))

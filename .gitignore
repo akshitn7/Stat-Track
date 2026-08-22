@@ -1,0 +1,7 @@
+/docs 
+/.venv
+GEMINI.md
+.env
+AGENT.md
+/etl/__pycache__
+*.pyc

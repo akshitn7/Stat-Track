@@ -1,0 +1,6 @@
+streamlit
+pandas
+plotly
+mysql-connector-python
+python-dotenv
+notebook
